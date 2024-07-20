@@ -11,10 +11,11 @@ let
   # https://github.com/sharkdp/bat/issues/1145
   manpager = (pkgs.writeShellScriptBin "manpager" (if isDarwin then ''
     sh -c 'col -bx | bat -l man -p'
-    '' else ''
+  '' else ''
     cat "$1" | col -bx | bat --language man --style plain
   ''));
-in {
+in
+{
   # Home-manager 22.11 requires this be set. We never set it so we have
   # to use the old state version.
   home.stateVersion = "18.09";
@@ -89,9 +90,9 @@ in {
   } // (if isDarwin then {
     # Rectangle.app. This has to be imported manually using the app.
     "rectangle/RectangleConfig.json".text = builtins.readFile ./RectangleConfig.json;
-  } else {}) // (if isLinux then {
+  } else { }) // (if isLinux then {
     "ghostty/config".text = builtins.readFile ./ghostty.linux;
-  } else {});
+  } else { });
 
   #---------------------------------------------------------------------
   # Programs
@@ -101,7 +102,7 @@ in {
 
   programs.bash = {
     enable = true;
-    shellOptions = [];
+    shellOptions = [ ];
     historyControl = [ "ignoredups" "ignorespace" ];
     initExtra = builtins.readFile ./bashrc;
 
@@ -118,17 +119,17 @@ in {
     };
   };
 
-  programs.direnv= {
+  programs.direnv = {
     enable = true;
 
     config = {
       whitelist = {
-        prefix= [
+        prefix = [
           "$HOME/code/go/src/github.com/hashicorp"
           "$HOME/code/go/src/github.com/mitchellh"
         ];
 
-        exact = ["$HOME/.envrc"];
+        exact = [ "$HOME/.envrc" ];
       };
     };
   };
@@ -158,12 +159,13 @@ in {
       # that I'm just going to keep it consistent.
       pbcopy = "xclip";
       pbpaste = "xclip -o";
-    } else {});
+    } else { });
 
-    plugins = map (n: {
-      name = n;
-      src  = sources.${n};
-    }) [
+    plugins = map
+      (n: {
+        name = n;
+        src = sources.${n};
+      }) [
       "fish-fzf"
       "fish-foreign-env"
       "theme-bobthefish"
